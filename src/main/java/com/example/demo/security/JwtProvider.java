@@ -23,8 +23,8 @@ public class JwtProvider {
     public void init(){
         try{
             keyStore = KeyStore.getInstance("JKS");
-            InputStream resourceAsStream = getClass().getResourceAsStream("/springblog-jks");
-            keyStore.load(resourceAsStream, "secret".toCharArray());
+            InputStream resourceAsStream = getClass().getResourceAsStream("/my-release-key.keystore");
+            keyStore.load(resourceAsStream, "123qwe".toCharArray());
         }catch (KeyStoreException| CertificateException | NoSuchAlgorithmException | IOException e){
             throw new SecurityException("Exception occured while loading keystroke");
         }
@@ -32,7 +32,7 @@ public class JwtProvider {
 
 
     public String generateToken(Authentication authentication){
-        User principal = (User) authentication.getPrincipal();
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject(principal.getUsername())
                 .signWith(getPrivateKey())
@@ -41,7 +41,7 @@ public class JwtProvider {
 
     private PrivateKey getPrivateKey() {
         try {
-            return (PrivateKey) keyStore.getKey("springblog", "secret".toCharArray());
+            return (PrivateKey) keyStore.getKey("alias_name", "123qwe".toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             throw new SpringRedditException("Exception occured while retrieving public key from keystore");
         }

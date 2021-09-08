@@ -4,6 +4,7 @@ import com.example.demo.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,6 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**")
+                .permitAll()
+                .antMatchers(HttpMethod.GET,"api/subreddit")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
