@@ -1,2 +1,2 @@
-package com.example.demo.mapper;public interface SubredditMapper {
+package com.example.demo.mapper;public class SubredditMapper {
 }
