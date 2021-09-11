@@ -20,18 +20,18 @@ public class JwtProvider {
     private KeyStore keyStore;
 
     @PostConstruct
-    public void init(){
-        try{
+    public void init() {
+        try {
             keyStore = KeyStore.getInstance("JKS");
             InputStream resourceAsStream = getClass().getResourceAsStream("/my-release-key.keystore");
             keyStore.load(resourceAsStream, "123qwe".toCharArray());
-        }catch (KeyStoreException| CertificateException | NoSuchAlgorithmException | IOException e){
+        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
             throw new SecurityException("Exception occured while loading keystroke");
         }
     }
 
 
-    public String generateToken(Authentication authentication){
+    public String generateToken(Authentication authentication) {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject(principal.getUsername())
@@ -46,33 +46,33 @@ public class JwtProvider {
             throw new SpringRedditException("Exception occured while retrieving public key from keystore");
         }
     }
+
     public String validateToken(String jwt) {
-        Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(getPublicKey())
-                .requireAudience("string")
+        Jws<Claims> jws = Jwts.parserBuilder()
+                .setSigningKey(getPublicKey())
                 .build()
                 .parseClaimsJws(jwt);
 
         return jwt;
     }
-        private PublicKey getPublicKey(){
-          try {
-              return keyStore.getCertificate("springblog").getPublicKey();
-          }catch (KeyStoreException e){
-              throw new SecurityException("Exception occured while" +
-                      "retrieving public key from keystore");
-          }
-        }
 
-        public String getUsernameFromJWT(String token){
-            Claims claims =Jwts.parserBuilder()
-                .requireAudience("string")
+    private PublicKey getPublicKey() {
+        try {
+            return keyStore.getCertificate("alias_name").getPublicKey();
+        } catch (KeyStoreException e) {
+            throw new SecurityException("Exception occured while" +
+                    "retrieving public key from keystore");
+        }
+    }
+
+    public String getUsernameFromJWT(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getPublicKey())
                 .build()
                 .parseClaimsJws(token)
-                    .getBody();
-
+                .getBody();
 
         return claims.getSubject();
-
-        }
+    }
 
 }

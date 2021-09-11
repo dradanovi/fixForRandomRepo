@@ -7,13 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostResponse {
+public class PostDto {
 
     private Long id;
     private String postName;
-    private String subredditName;
     private String description;
     private String url;
-    private String userName;
 
 }

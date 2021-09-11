@@ -24,7 +24,7 @@ public class UserDetailsServiceImpls implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username)  {
+    public UserDetails loadUserByUsername(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("No user found" + username));
 
@@ -35,7 +35,7 @@ public class UserDetailsServiceImpls implements UserDetailsService {
 
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(String role){
+    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
         return Collections.singletonList((new SimpleGrantedAuthority(role)));
     }
 }

@@ -29,7 +29,6 @@ import java.util.UUID;
 public class AuthService {
 
 
-
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
@@ -38,7 +37,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
 
     @Transactional
-    public void signup(RegisterRequest registerRequest){
+    public void signup(RegisterRequest registerRequest) {
 
         User user = new User();
         user.setUsername(registerRequest.getUsername());
@@ -48,10 +47,10 @@ public class AuthService {
         user.setEnabled(false);
         userRepository.save(user);
 
-       String token = generateVerificationToken(user);
-       mailService.sendEmail(new NotificationEmail("Please activate your account",
-               user.getEmail(), "Thanks for signing in. Please click the url below" +
-               "http://localhost:8080/api/auth/accountVerification/" + token));
+        String token = generateVerificationToken(user);
+        mailService.sendEmail(new NotificationEmail("Please activate your account",
+                user.getEmail(), "Thanks for signing in. Please click the url below" +
+                "http://localhost:8080/api/auth/accountVerification/" + token));
 
     }
 
@@ -69,7 +68,7 @@ public class AuthService {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
         verificationToken.orElseThrow(() -> new SpringRedditException("Invalid Token"));
         fetchUserAndEnable(verificationToken.get());
-     }
+    }
 
     private void fetchUserAndEnable(VerificationToken verificationToken) {
         String username = verificationToken.getUser().getUsername();
@@ -79,7 +78,7 @@ public class AuthService {
     }
 
     public AuthenticationResponse login(LoginRequest loginRequest) {
-       Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);

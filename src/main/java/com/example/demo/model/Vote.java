@@ -21,7 +21,7 @@ public class Vote {
     private Long voteId;
     private VoteType voteType;
     @NotNull
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId", referencedColumnName = "postid")
     private Post post;
     @ManyToOne(fetch = FetchType.LAZY)
