@@ -1,8 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.PostDto;
-import com.example.demo.dto.SubredditDto;
-import com.example.demo.exception.SpringRedditException;
 import com.example.demo.mapper.PostMapper;
 import com.example.demo.model.Post;
 
@@ -32,6 +30,16 @@ public class PostService {
         return postDto;
 
     }
+
+
+    @Transactional
+    public PostDto getPostDto (Long id){
+        Post getPostById = postRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("No such data found"));
+        return  postMapper.postDto(getPostById);
+    }
+
 
     @Transactional(readOnly = true)
     public List<PostDto> getAll() {
