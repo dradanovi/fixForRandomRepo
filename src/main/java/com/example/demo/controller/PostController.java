@@ -1,6 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PostDto;
+import com.example.demo.mapper.PostMapper;
+import com.example.demo.model.Post;
+import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.PostService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +21,8 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final PostMapper postMapper;
+
 
     @PostMapping
     public ResponseEntity<Void> createPost(@RequestBody PostDto postDto) {
@@ -34,6 +40,16 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<PostDto>> getAllPosts() {
         return ResponseEntity.status(HttpStatus.OK).body(postService.getAll());
+    }
+
+    @GetMapping("by-subreddit/{id}")
+    public ResponseEntity<List<PostDto>> getPostsBySubreddit(Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(postService.getPostsBySubredditId(id));
+    }
+
+    @GetMapping("by-user/{name}")
+    public ResponseEntity<List<PostDto>> getPostsByUsername(String username){
+        return ResponseEntity.status(HttpStatus.OK).body(postService.getPostByUsername(username));
     }
 
 }

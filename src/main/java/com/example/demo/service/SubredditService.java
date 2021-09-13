@@ -31,14 +31,18 @@ public class SubredditService {
 
 
     @Transactional
-    public SubredditDto save(SubredditDto subredditDto) {
+    public SubredditDto saveIt(SubredditDto subredditDto) {
 
         Subreddit save;
-        save = subredditRepository.save(subredditMapper.mapDtoSubredditToSubreddit(subredditDto));
+        Subreddit dtoToSubreddit;
+
+        dtoToSubreddit = subredditMapper.mapDtoSubredditToSubreddit(subredditDto);
+        save = subredditRepository.save(dtoToSubreddit);
         subredditDto.setId((save.getId()));
+
+
         return subredditDto;
     }
-
 
 
     @Transactional(readOnly = true)

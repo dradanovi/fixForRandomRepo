@@ -36,6 +36,7 @@ public class SubredditMapper {
         subreddit.setName(subredditDto.getName());
         subreddit.setDescription(subredditDto.getDescription());
 
+
         return subreddit;
     }
 
