@@ -23,10 +23,11 @@ public class Subreddit {
     private String name;
     @NotBlank(message = "Description is required")
     private String description;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subreddit", fetch = FetchType.LAZY)
     private List<Post> posts;
     private Instant createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
     private User user;
 
 

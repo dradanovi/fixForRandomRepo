@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.PostDto;
+import com.example.demo.dto.PostSaveRequest;
 import com.example.demo.exception.SubredditNotFoundException;
 import com.example.demo.mapper.PostMapper;
 import com.example.demo.model.Post;
@@ -15,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -32,11 +32,12 @@ public class PostService {
     private final SubredditRepository subredditRepository;
 
     @Transactional
-    public PostDto save(PostDto postDto ) {
+    public PostDto save(PostSaveRequest saveRequest ) {
+        User user = this.userRepository.findById(saveRequest.getUserId()).orElse(null);
+        Subreddit subreddit = this.subredditRepository.findById(saveRequest.getSubredditId()).orElse(null);
 
-        Post save = postRepository.save(postMapper.dtoToPOst(postDto));
-        postDto.setId(save.getPostId());
-        return postDto;
+        Post save = postRepository.save(postMapper.PostReqToEnt(saveRequest, user, subreddit));
+        return this.postMapper.PostEntToDto(save);
 
     }
 

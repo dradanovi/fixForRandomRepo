@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PostDto;
+import com.example.demo.dto.PostSaveRequest;
 import com.example.demo.mapper.PostMapper;
 import com.example.demo.model.Post;
 import com.example.demo.repository.PostRepository;
@@ -25,9 +26,9 @@ public class PostController {
 
 
     @PostMapping
-    public ResponseEntity<Void> createPost(@RequestBody PostDto postDto) {
-        postService.save(postDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<PostDto> createPost(@RequestBody PostSaveRequest saveRequest) {
+        PostDto postDto = postService.save(saveRequest);
+        return ResponseEntity.ok().body(postDto);
     }
 
     @GetMapping("/{id}")
